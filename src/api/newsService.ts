@@ -23,8 +23,7 @@ export interface NewsResponse {
     articles: Article[];
 }
 
-const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
-const BASE_URL = import.meta.env.VITE_NEWS_BASE_URL;
+const CMS_URL = import.meta.env.VITE_CMS_URL;
 
 export const fetchNews = async (
     sources: string[] = [], 
@@ -46,9 +45,10 @@ export const fetchNews = async (
     
     params.append("page", page.toString());
     params.append("pageSize", pageSize.toString());
-    params.append("apiKey", API_KEY);
-
-    const apiNews = `${BASE_URL}/top-headlines?${params.toString()}`;
-    const response = await axios.get(apiNews);
+    
+    // We no longer need the API_KEY on the client side at all.
+    // The Strapi CMS will handle it on the server.
+    const url = `${CMS_URL}/news?${params.toString()}`;
+    const response = await axios.get(url);
     return response.data;
 }
